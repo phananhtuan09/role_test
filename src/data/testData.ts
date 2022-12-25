@@ -1,4 +1,22 @@
-export const testData = {
+interface IRoleUserGroup {
+  functionGroupID: number;
+  functionIndex: number;
+  functionID: number;
+  functionName: string;
+  isPermission: boolean;
+}
+interface IRoleDetail {
+  functionGroupName: string;
+  userGroupFunctions: IRoleUserGroup[];
+}
+interface IRoleResponse {
+  userGroupID: string;
+  userGroupName: string;
+  status: boolean;
+  functions: IRoleDetail[];
+}
+
+export const testData: IRoleResponse = {
   userGroupID: "ADMIN",
   userGroupName: "Admin",
   status: false,
@@ -194,9 +212,13 @@ export const testData = {
   ],
 };
 
-export const formattedData = testData.functions.reduce((acc: any, cur: any) => {
-  let roleInfo: any = [];
-  cur.userGroupFunctions.forEach((el: any) => {
+export interface IRolDataFormatted {
+  string: number[];
+}
+
+export const formattedData = testData.functions.reduce((acc, cur) => {
+  const roleInfo: number[] = [];
+  cur.userGroupFunctions.forEach((el) => {
     if (el.isPermission) {
       roleInfo.push(el.functionID);
     }
@@ -205,4 +227,4 @@ export const formattedData = testData.functions.reduce((acc: any, cur: any) => {
     ...acc,
     [cur.functionGroupName]: roleInfo,
   };
-}, {});
+}, {}) as IRolDataFormatted;

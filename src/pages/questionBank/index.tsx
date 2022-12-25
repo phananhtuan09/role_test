@@ -1,11 +1,11 @@
 import React from "react";
-import { formattedData } from "../../data/testData";
-import { rolePages, rolePageVariable } from "../../data/dataSample";
+import { formattedData, IRolDataFormatted } from "../../data/testData";
+import { roleGroupName, roleGroupConstant } from "../../data/dataSample";
 import AddIcon from "@mui/icons-material/Add";
 import DropDownIcon from "../../components/DropDownIcon";
 
 const questionBank: React.FC = () => {
-  console.log("formattedData", formattedData[rolePageVariable.questionBank]);
+  console.log("formattedData", formattedData);
 
   const addQuestion = () => {
     alert("add Question");
@@ -52,9 +52,11 @@ const questionBank: React.FC = () => {
         }}
       >
         <DropDownIcon
-          typePage="question-bank"
+          typePage={roleGroupConstant.questionBank}
           listFunction={roleFunctionDropDownList}
-          listRole={formattedData[rolePageVariable.questionBank]}
+          listRole={
+            formattedData[roleGroupName.questionBank as keyof IRolDataFormatted]
+          }
         />
       </ul>
     </div>

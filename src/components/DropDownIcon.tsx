@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import {
-  roleTitle,
+  roleName,
   roleIcon,
   roleFunction,
   roleHasModal,
+  onDeleteFunc,
+  roleData,
+  roleGroupConstant,
+  roleGroupName,
+  roleDataDropDown,
 } from "../data/dataSample";
 import { Button } from "@mui/material";
 import ModalConfirm from "./ModalConfirm";
 interface IDropDown {
-  typePage: string;
+  typePage: number;
   listFunction: any;
-  listRole: any;
+  listRole: number[];
 }
 
 const DropDownIcon: React.FC<IDropDown> = ({
@@ -19,14 +24,11 @@ const DropDownIcon: React.FC<IDropDown> = ({
   listRole,
 }) => {
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
-  const renderItem = () => {};
-  const handleClick = (id: string, roleID: string) => {
+  const handleClick = (id: string, roleID: number) => {
     if (roleFunction[roleID]) {
       const funcName = roleFunction[roleID];
-      console.log("roleHasModal", roleHasModal[roleID]);
       if (roleHasModal[roleID]) {
-        if (roleFunction[roleID] === "onDelete") {
-          console.log("delete");
+        if (roleFunction[roleID] === onDeleteFunc) {
           setIsOpenModalDelete(true);
           return;
         }
@@ -37,21 +39,29 @@ const DropDownIcon: React.FC<IDropDown> = ({
   };
   return (
     <>
-      {listRole.map((role: any) => (
-        <Button
-          variant="outlined"
-          startIcon={
-            roleIcon[role] ? React.createElement(roleIcon[role]) : <></>
-          }
-          onClick={() => handleClick("0002", role)}
-        >
-          {roleTitle[role]}
-        </Button>
-      ))}
+      {roleDataDropDown[typePage].map((role: number, index: number) => {
+        if (listRole.includes(role)) {
+          return (
+            <Button
+              key={`${role}_${index}`}
+              variant="outlined"
+              startIcon={
+                roleIcon[role] ? React.createElement(roleIcon[role]) : <></>
+              }
+              onClick={() => handleClick("0002", role)}
+            >
+              {roleName[role]}
+            </Button>
+          );
+        }
+      })}
       <ModalConfirm
         text="Xác nhận xóa câu hỏi này"
         open={isOpenModalDelete}
-        handleClick={() => listFunction["onDelete"]("0002")}
+        handleClick={() => {
+          listFunction[onDeleteFunc]("0002");
+          setIsOpenModalDelete(false);
+        }}
         handleClose={() => setIsOpenModalDelete(false)}
       />
     </>
